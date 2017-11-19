@@ -1,6 +1,5 @@
-from numpy import *
-import numpy as np
 import matplotlib.pyplot as plt
+from numpy import *
 
 
 def find_best_interval(xs, ys, k):
@@ -101,18 +100,55 @@ def smallest_error_hypothesis():
 
 
 def c(intervals):
-    k=2
-    m=10
-    while(m<100):
-        for i in range(0,100):
-            points = get_points(m)
+    k = 2
+    m = 10
 
-        m+=5
+    error = get_overlap(intervals[0][0]) + get_overlap(intervals[0][1])
+    print(error)
+
+    while m < 100:
+        xs, ys = get_points(m)
+        result = find_best_interval(xs, ys, k)
+        print("empirical error: " + k)
+        print("true error for new hypothesis: " + get_overlap(result[0][0] + get_overlap(result[0][1])))
+        m += 5
+
+
+def get_overlap(a):
+    error = 0
+
+    # fully overlap
+    if a[0] >= 0 and a[1] <= 0.25:
+        error += 0.2 * (a[0] - 0) + (0.25 - a[1])
+        print(1)
+    if a[0] >= 0.5 and a[1] <= 0.75:
+        error += 0.2 * (a[0] - 0.5) + (0.75 - a[1])
+        print(2)
+    # no overlap
+    if (a[0] > 0.25 and a[1] < 0.5) or (a[0] > 0.75):
+        error += 0.9 * (a[1] - a[0])
+        print(3)
+    # partial overlap
+    if a[1] > 0.25 and a[0] < 0.25:
+        error += a[0] * 0.2 + (a[1] - 0.25) * 0.9
+        print(4)
+    if a[1] > 0.5 and a[0] < 0.5:
+        error += (a[1] - 0.5) * 0.2 + (0.5 - a[0]) * 0.9
+        print(5)
+    if 0.5 < a[0] < 0.75 and a[1] > 0.75:
+        error += (a[1] - 0.75) * 0.9 + (0.75 - a[0]) * 0.2
+        print(6)
+    if a[0] < 0.5 and a[1] > 0.75:
+        error += 0.9 * (0.5 - a[0] + a[1] - 0.75)
+        print(7)
+
+    return error
 
 
 xs, ys = get_points(100)
 result = find_best_interval(xs, ys, 2)
 print(result)
+c(result)
 
 # print(smallest_error_hypothesis(2))
 # PLOTS
