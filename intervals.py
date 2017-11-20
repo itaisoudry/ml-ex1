@@ -182,7 +182,7 @@ def get_true_error(intervals):
                             0.75 < interval[0] <= 1 and 0.75 < interval[1] <= 1):
             not_overlapping += interval[1] - interval[0]
 
-    error = 0.2 * overlapping + 0.8*(0.5-overlapping) + 0.9 * not_overlapping + 0.1*(0.5-not_overlapping)
+    error = 0.2 * overlapping + 0.8*(0.5-overlapping) + 0.1 * not_overlapping + 0.9*(0.5-not_overlapping)
     print(error)
     return error
 
@@ -199,8 +199,8 @@ xs, ys = get_points(100)
 result = find_best_interval(xs, ys, 2)
 print(result)
 
-# c(result)
-d()
+c(result)
+# d()
 # e(10)
 # print(smallest_error_hypothesis(2))
 # PLOTS
