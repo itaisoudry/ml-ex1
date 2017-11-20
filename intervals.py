@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from numpy import *
+import numpy as np
 
 
 def find_best_interval(xs, ys, k):
@@ -106,12 +107,39 @@ def c(intervals):
     error = get_overlap(intervals[0][0]) + get_overlap(intervals[0][1])
     print(error)
 
-    while m < 100:
-        xs, ys = get_points(m)
-        result = find_best_interval(xs, ys, k)
-        print("empirical error: " + k)
-        print("true error for new hypothesis: " + get_overlap(result[0][0] + get_overlap(result[0][1])))
+    empirical_points = []
+    true_error_points = []
+    y_points = []
+    while m <= 100:
+        y_points.append(m)
+        empirical_avg = 0
+        true_error_avg = 0
+
+        for t in range(0, 100):
+            xs, ys = get_points(m)
+            result = find_best_interval(xs, ys, k)
+
+            print(result)
+            empirical_avg += result[1]
+            try:
+                true_error = get_overlap(result[0][0]) + get_overlap(result[0][1])
+                true_error_avg += true_error
+            except:
+                print("Error in find_best_intervals")
+            print("empirical error: " + str(k))
+            print("true error for new hypothesis: " + str(true_error))
+
+        # calculate average for empirical error and true error
+        empirical_avg = empirical_avg / 100
+        true_error_avg = true_error_avg / 100
+        # save points inside array
+        empirical_points.append(empirical_avg)
+        true_error_points.append(true_error_avg)
+
         m += 5
+
+        # plot graph
+    plot_empirical_and_true(empirical_points, true_error_points, y_points)
 
 
 def get_overlap(a):
@@ -132,7 +160,7 @@ def get_overlap(a):
     if a[1] > 0.25 and a[0] < 0.25:
         error += a[0] * 0.2 + (a[1] - 0.25) * 0.9
         print(4)
-    if a[1] > 0.5 and a[0] < 0.5:
+    if 0.75 > a[1] > 0.5 and a[0] < 0.5:
         error += (a[1] - 0.5) * 0.2 + (0.5 - a[0]) * 0.9
         print(5)
     if 0.5 < a[0] < 0.75 and a[1] > 0.75:
@@ -143,6 +171,12 @@ def get_overlap(a):
         print(7)
 
     return error
+
+
+def plot_empirical_and_true(empirical, true, y_points):
+    plt.scatter(empirical, y_points, color='r')
+    plt.scatter(true, y_points, color='b')
+    plt.show()
 
 
 xs, ys = get_points(100)
