@@ -141,28 +141,28 @@ def d():
     empirical_points = []
     true_points = []
     k_points = []
-    best_hypothesis = []
-    best_true_error = 100
+    intervals = []
     for k in range(1, 20):
         result = find_best_interval(xs, ys, k)
+        intervals.append(result)
         print(result)
         empirical_error = result[1] / m
         true_error = get_true_error(result[0])
-        # if its the best interval yet save it
-        if true_error<best_true_error:
-            best_true_error = true_error
-            best_hypothesis = result[0]
         empirical_points.append(empirical_error)
         true_points.append(true_error)
         k_points.append(k)
     plot_empirical_and_true(empirical_points, true_points, k_points)
-    return best_hypothesis
+    return result
 
 
 def e(d_result):
     xs,ys = get_points(50)
 
     # train on 40 points (80% of 50)
+    training_xs = xs[:40]
+    training_ys = ys[:40]
+    holdout_xs = xs[40:50]
+    holdout_ys = ys[40:50]
 
     # choose the best on based on the 10 points left (20%)
 
@@ -206,9 +206,9 @@ def plot_empirical_and_true(empirical, true, y_points):
 
 
 # a()
-xs, ys = get_points(100)
-result = find_best_interval(xs, ys, 2)
-c(result)
+# xs, ys = get_points(100)
+# result = find_best_interval(xs, ys, 2)
+# c(result)
 best_hypothesis = d()
 e(best_hypothesis)
 # print(smallest_error_hypothesis(2))
