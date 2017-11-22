@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-import numpy as np
 from numpy import *
+import numpy as np
 
 
 def find_best_interval(xs, ys, k):
@@ -141,16 +141,30 @@ def d():
     empirical_points = []
     true_points = []
     k_points = []
+    best_hypothesis = []
+    best_true_error = 100
     for k in range(1, 20):
         result = find_best_interval(xs, ys, k)
         print(result)
         empirical_error = result[1] / m
         true_error = get_true_error(result[0])
-
+        # if its the best interval yet save it
+        if true_error<best_true_error:
+            best_true_error = true_error
+            best_hypothesis = result[0]
         empirical_points.append(empirical_error)
         true_points.append(true_error)
         k_points.append(k)
     plot_empirical_and_true(empirical_points, true_points, k_points)
+    return best_hypothesis
+
+
+def e(d_result):
+    xs,ys = get_points(50)
+
+    # train on 40 points (80% of 50)
+
+    # choose the best on based on the 10 points left (20%)
 
 
 def get_true_error(intervals):
@@ -180,21 +194,23 @@ def get_true_error(intervals):
                             0.75 < interval[0] <= 1 and 0.75 < interval[1] <= 1):
             not_overlapping += interval[1] - interval[0]
 
-    error = 0.2 * overlapping + 0.8 * (0.5 - overlapping) + 0.1 * not_overlapping + 0.9 * (0.5 - not_overlapping)
+    error = 0.2 * overlapping + 0.8 * (0.5 - overlapping) + 0.9 * not_overlapping + 0.1 * (0.5 - not_overlapping)
     print(error)
     return error
 
 
 def plot_empirical_and_true(empirical, true, y_points):
-    plt.scatter(y_points,empirical , color='r')
-    plt.scatter(y_points,true, color='b')
+    plt.scatter(y_points, empirical, color='r')
+    plt.scatter(y_points, true, color='b')
     plt.show()
 
 
-a()
-# c(result)
-# d()
-# e(10)
+# a()
+xs, ys = get_points(100)
+result = find_best_interval(xs, ys, 2)
+c(result)
+best_hypothesis = d()
+e(best_hypothesis)
 # print(smallest_error_hypothesis(2))
 # PLOTS
 # plot_intervals(result)
