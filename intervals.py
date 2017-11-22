@@ -68,23 +68,18 @@ def get_points(num_of_points):
     return xs, ys
 
 
-def plot(xs, ys):
+def a():
+    xs, ys = get_points(100)
+    result = find_best_interval(xs, ys, 2)
     axes = plt.gca()
     axes.set_xlim([0, 1])
-    axes.set_ylim([-1, 1.1])
+    axes.set_ylim([-0.1, 1.1])
     plt.axvline(0.25)
     plt.axvline(0.5)
     plt.axvline(0.75)
     plt.scatter(xs, ys)
-    plt.show()
-
-
-def plot_intervals(result):
-    axes = plt.gca()
-    axes.set_xlim([0, 1])
-    axes.set_ylim([-1, 1.1])
-    plt.axhline(-1, result[0][0][0], result[0][0][1], color='r')
-    plt.axhline(-1, result[0][1][0], result[0][1][1], color='b')
+    plt.axhline(0.5, result[0][0][0], result[0][0][1], color='r')
+    plt.axhline(0.5, result[0][1][0], result[0][1][1], color='b')
     plt.show()
 
 
@@ -162,19 +157,22 @@ def get_true_error(intervals):
     overlapping = 0
     not_overlapping = 0
     for interval in intervals:
-        if (0 <= interval[0] <= 0.25 and 0 <= interval[1] <= 0.25) or (
-                            0.5 <= interval[0] <= 0.75 and 0.5 <= interval[1] <= 0.75):
+        if 0 <= interval[0] <= 0.25 and 0 <= interval[1] <= 0.25:
             overlapping += interval[1] - interval[0]
-        if 0<=interval[0]<=0.25 and 0.5<=interval[1]<=0.75:
-            overlapping+=0.25-interval[0] + interval[1]-0.5
-            not_overlapping+=0.25
+            not_overlapping += 0.25 - interval[1] + interval[0]
+        if 0.5 <= interval[0] <= 0.75 and 0.5 <= interval[1] <= 0.75:
+            overlapping += interval[1] - interval[0]
+            not_overlapping += 0.75 - interval[1] + interval[0] - 0.5
+        if 0 <= interval[0] <= 0.25 and 0.5 <= interval[1] <= 0.75:
+            overlapping += 0.25 - interval[0] + interval[1] - 0.5
+            not_overlapping += 0.25
         if 0 <= interval[0] <= 0.25 <= interval[1] <= 0.5:
             overlapping += 0.25 - interval[0]
             not_overlapping += interval[1] - 0.25
-        if 0.25 <= interval[0] <= 0.5 and 0.5 <= interval[1] < 0.75:
+        if 0.25 <= interval[0] <= 0.5 <= interval[1] < 0.75:
             overlapping += interval[1] - 0.5
             not_overlapping += 0.5 - interval[0]
-        if 0.5 <= interval[0] <= 0.75 and 0.75 < interval[1]:
+        if 0.5 <= interval[0] <= 0.75 < interval[1]:
             overlapping += 0.75 - interval[0]
             not_overlapping += interval[1] - 0.75
 
@@ -182,27 +180,23 @@ def get_true_error(intervals):
                             0.75 < interval[0] <= 1 and 0.75 < interval[1] <= 1):
             not_overlapping += interval[1] - interval[0]
 
-    error = 0.2 * overlapping + 0.8*(0.5-overlapping) + 0.1 * not_overlapping + 0.9*(0.5-not_overlapping)
+    error = 0.2 * overlapping + 0.8 * (0.5 - overlapping) + 0.1 * not_overlapping + 0.9 * (0.5 - not_overlapping)
     print(error)
     return error
 
 
-
-
 def plot_empirical_and_true(empirical, true, y_points):
-    plt.scatter(empirical, y_points, color='r')
-    plt.scatter(true, y_points, color='b')
+    plt.scatter(y_points,empirical , color='r')
+    plt.scatter(y_points,true, color='b')
     plt.show()
 
 
-xs, ys = get_points(100)
-result = find_best_interval(xs, ys, 2)
-print(result)
-
-c(result)
+a()
+# c(result)
 # d()
 # e(10)
 # print(smallest_error_hypothesis(2))
 # PLOTS
 # plot_intervals(result)
 # plot(xs, ys)
+# get_true_error([(0, 0.25), (0.5, 0.75)])
