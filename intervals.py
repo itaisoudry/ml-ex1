@@ -80,7 +80,7 @@ def a():
     plt.scatter(xs, ys)
     plt.axhline(0.5, result[0][0][0], result[0][0][1], color='r')
     plt.axhline(0.5, result[0][1][0], result[0][1][1], color='b')
-    plt.show()
+    plt.savefig("a.png")
 
 
 # b.
@@ -135,15 +135,16 @@ def d():
     true_points = []
     k_points = []
     intervals = []
+
     for k in range(1, 21):
         result = find_best_interval(xs, ys, k)
+        # save result for later use in question e
         intervals.append(result)
-        print(result)
-        empirical_error = result[1] / m
-        true_error = get_true_error(result[0])
-        empirical_points.append(empirical_error)
-        true_points.append(true_error)
+        empirical_points.append(result[1] / m)
+        true_points.append(get_true_error(result[0]))
+        # save array of k's for using in the plot as the y axis
         k_points.append(k)
+
     plot_empirical_and_true(empirical_points, true_points, k_points, 'k')
     return intervals
 
@@ -157,15 +158,22 @@ def e(d_result):
         errors = 0
         hypothesis = d_result[k][0]
         for i in range(0, 50):
+            found = False
             x = xs[i]
             y = ys[i]
-            for j in range(0, len(hypothesis) - 1):
-                if hypothesis[j][0] <= x <= hypothesis[j][1]:
-                    if y != 1:
-                        errors += 1
-                elif y == 1:
-                    errors += 1
-        if errors <= best_empirical:
+
+            for interval in hypothesis:
+                # if interval containing x found, break
+                if interval[0] <= x <= interval[1]:
+                    found = True
+                    break
+            # check for errors
+            if found and y == 0:
+                errors += 1
+            if not found and y == 1:
+                errors += 1
+
+        if errors < best_empirical:
             best_empirical = errors
             best_hypothesis = hypothesis
 
@@ -176,19 +184,24 @@ def e(d_result):
 def get_true_error(intervals):
     overlapping = 0
     not_overlapping = 0
+
     for interval in intervals:
         if (0 <= interval[0] <= 0.25 and 0 <= interval[1] <= 0.25) or (
                             0.5 <= interval[0] <= 0.75 and 0.5 <= interval[1] <= 0.75):
             overlapping += interval[1] - interval[0]
+
         if 0 <= interval[0] <= 0.25 and 0.5 <= interval[1] <= 0.75:
             overlapping += interval[0] + (interval[1] - 0.5)
             not_overlapping += 0.25
+
         if 0 <= interval[0] <= 0.25 <= interval[1] <= 0.5:
             overlapping += 0.25 - interval[0]
             not_overlapping += interval[1] - 0.25
+
         if 0.25 <= interval[0] <= 0.5 <= interval[1] < 0.75:
             overlapping += interval[1] - 0.5
             not_overlapping += 0.5 - interval[0]
+
         if 0.5 <= interval[0] <= 0.75 < interval[1]:
             overlapping += 0.75 - interval[0]
             not_overlapping += interval[1] - 0.75
@@ -207,8 +220,12 @@ def plot_empirical_and_true(empirical, true, y_points, x_label):
     plt.scatter(y_points, true, color='b')
     plt.xlabel(x_label)
     plt.ylabel('errors')
-    plt.show()
 
+    filename = "d.png"
+    if x_label == 'k':
+        filename='c.png'
+
+    plt.savefig(filename)
 
 # a()
 # xs, ys = get_points(100)
