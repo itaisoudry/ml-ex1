@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-from numpy import *
 import numpy as np
+from numpy import *
 
 
 def find_best_interval(xs, ys, k):
@@ -132,7 +132,7 @@ def c(intervals):
         m += 5
 
         # plot graph
-    plot_empirical_and_true(empirical_points, true_error_points, y_points,'m')
+    plot_empirical_and_true(empirical_points, true_error_points, y_points, 'm')
 
 
 def d():
@@ -151,22 +151,22 @@ def d():
         empirical_points.append(empirical_error)
         true_points.append(true_error)
         k_points.append(k)
-    plot_empirical_and_true(empirical_points, true_points, k_points,'k')
+    plot_empirical_and_true(empirical_points, true_points, k_points, 'k')
     return intervals
 
 
 def e(d_result):
-    xs,ys = get_points(50)
+    xs, ys = get_points(50)
     best_empirical = 100
     best_hypothesis = []
 
-    for k in range(0,19):
+    for k in range(0, 19):
         errors = 0
         hypothesis = d_result[k][0]
-        for i in range(0,49):
+        for i in range(0, 49):
             x = xs[i]
             y = ys[i]
-            for j in range(0,len(hypothesis)-1):
+            for j in range(0, len(hypothesis) - 1):
                 if hypothesis[j][0] <= x <= hypothesis[j][1]:
                     if y != 1:
                         errors += 1
@@ -174,7 +174,7 @@ def e(d_result):
             best_empirical = errors
             best_hypothesis = hypothesis
 
-    print("Best Hypthesis is:"+str(best_hypothesis))
+    print("Best Hypthesis is:" + str(best_hypothesis))
     return best_hypothesis
 
 
@@ -182,14 +182,11 @@ def get_true_error(intervals):
     overlapping = 0
     not_overlapping = 0
     for interval in intervals:
-        if 0 <= interval[0] <= 0.25 and 0 <= interval[1] <= 0.25:
+        if (0 <= interval[0] <= 0.25 and 0 <= interval[1] <= 0.25) or (
+                            0.5 <= interval[0] <= 0.75 and 0.5 <= interval[1] <= 0.75):
             overlapping += interval[1] - interval[0]
-            not_overlapping += 0.25 - interval[1] + interval[0]
-        if 0.5 <= interval[0] <= 0.75 and 0.5 <= interval[1] <= 0.75:
-            overlapping += interval[1] - interval[0]
-            not_overlapping += 0.75 - interval[1] + interval[0] - 0.5
         if 0 <= interval[0] <= 0.25 and 0.5 <= interval[1] <= 0.75:
-            overlapping += 0.25 - interval[0] + interval[1] - 0.5
+            overlapping += interval[0] + (interval[1] - 0.5)
             not_overlapping += 0.25
         if 0 <= interval[0] <= 0.25 <= interval[1] <= 0.5:
             overlapping += 0.25 - interval[0]
@@ -219,9 +216,9 @@ def plot_empirical_and_true(empirical, true, y_points, x_label):
 
 
 # a()
-# xs, ys = get_points(100)
-# result = find_best_interval(xs, ys, 2)
-# c(result)
+xs, ys = get_points(100)
+result = find_best_interval(xs, ys, 2)
+c(result)
 best_hypothesis = d()
 e(best_hypothesis)
 # print(smallest_error_hypothesis(2))
