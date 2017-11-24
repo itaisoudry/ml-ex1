@@ -132,7 +132,7 @@ def c(intervals):
         m += 5
 
         # plot graph
-    plot_empirical_and_true(empirical_points, true_error_points, y_points)
+    plot_empirical_and_true(empirical_points, true_error_points, y_points,'m')
 
 
 def d():
@@ -151,8 +151,8 @@ def d():
         empirical_points.append(empirical_error)
         true_points.append(true_error)
         k_points.append(k)
-    plot_empirical_and_true(empirical_points, true_points, k_points)
-    return empirical_points
+    plot_empirical_and_true(empirical_points, true_points, k_points,'k')
+    return intervals
 
 
 def e(d_result):
@@ -160,20 +160,21 @@ def e(d_result):
     best_empirical = 100
     best_hypothesis = []
 
-    for k in range(1,20):
+    for k in range(0,19):
         errors = 0
         hypothesis = d_result[k][0]
         for i in range(0,49):
             x = xs[i]
             y = ys[i]
-            if hypothesis[0] <= x <= hypothesis[1]:
-                if y != 1:
-                    errors += 1
+            for j in range(0,len(hypothesis)-1):
+                if hypothesis[j][0] <= x <= hypothesis[j][1]:
+                    if y != 1:
+                        errors += 1
         if errors < best_empirical:
             best_empirical = errors
             best_hypothesis = hypothesis
 
-    print("Best Hypthesis is:"+best_hypothesis)
+    print("Best Hypthesis is:"+str(best_hypothesis))
     return best_hypothesis
 
 
@@ -209,9 +210,11 @@ def get_true_error(intervals):
     return error
 
 
-def plot_empirical_and_true(empirical, true, y_points):
+def plot_empirical_and_true(empirical, true, y_points, x_label):
     plt.scatter(y_points, empirical, color='r')
     plt.scatter(y_points, true, color='b')
+    plt.xlabel(x_label)
+    plt.ylabel('errors')
     plt.show()
 
 
