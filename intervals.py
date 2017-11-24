@@ -163,7 +163,9 @@ def e(d_result):
                 if hypothesis[j][0] <= x <= hypothesis[j][1]:
                     if y != 1:
                         errors += 1
-        if errors < best_empirical:
+                elif y == 1:
+                    errors += 1
+        if errors <= best_empirical:
             best_empirical = errors
             best_hypothesis = hypothesis
 
@@ -208,9 +210,9 @@ def plot_empirical_and_true(empirical, true, y_points, x_label):
     plt.show()
 
 
-a()
-xs, ys = get_points(100)
-result = find_best_interval(xs, ys, 2)
-c(result)
+# a()
+# xs, ys = get_points(100)
+# result = find_best_interval(xs, ys, 2)
+# c(result)
 best_hypothesis = d()
 e(best_hypothesis)
