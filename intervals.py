@@ -83,14 +83,7 @@ def a():
     plt.show()
 
 
-# b. Proof: Since we would like to create the Hypothesis with the smallest true error
-# and we know the probability P, we can just calculate the probability of an error.
-# But, since we need to return a 0\1 result for x in some intervals such that the number
-# of errors will be the smallest, we choose the first two intervals.
-# there is a probability of 0.8 to x in the first and third quarter to be labeled as one
-# and on the other hand, 0.1 to be 1 if x is in the second or fourth quarter, which is very unlikely.
-# so if x is in the first or third quarter, it has the highest probability to be labeled correctly, thus minimizing
-# the probability of making a mistake.
+# b.
 def smallest_error_hypothesis():
     return [(0, 0.25), (0.5, 0.75)]
 
@@ -142,7 +135,7 @@ def d():
     true_points = []
     k_points = []
     intervals = []
-    for k in range(1, 20):
+    for k in range(1, 21):
         result = find_best_interval(xs, ys, k)
         intervals.append(result)
         print(result)
@@ -160,10 +153,10 @@ def e(d_result):
     best_empirical = 100
     best_hypothesis = []
 
-    for k in range(0, 19):
+    for k in range(0, 20):
         errors = 0
         hypothesis = d_result[k][0]
-        for i in range(0, 49):
+        for i in range(0, 50):
             x = xs[i]
             y = ys[i]
             for j in range(0, len(hypothesis) - 1):
@@ -215,14 +208,9 @@ def plot_empirical_and_true(empirical, true, y_points, x_label):
     plt.show()
 
 
-# a()
+a()
 xs, ys = get_points(100)
 result = find_best_interval(xs, ys, 2)
 c(result)
 best_hypothesis = d()
 e(best_hypothesis)
-# print(smallest_error_hypothesis(2))
-# PLOTS
-# plot_intervals(result)
-# plot(xs, ys)
-# get_true_error([(0, 0.25), (0.5, 0.75)])
