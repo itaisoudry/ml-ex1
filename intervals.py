@@ -81,6 +81,7 @@ def a():
     plt.axhline(0.5, result[0][0][0], result[0][0][1], color='r')
     plt.axhline(0.5, result[0][1][0], result[0][1][1], color='b')
     plt.savefig("a.png")
+    plt.clf()
 
 
 # b.
@@ -107,7 +108,6 @@ def c(intervals):
             xs, ys = get_points(m)
             result = find_best_interval(xs, ys, k)
 
-            print(result)
             true_error = get_true_error(result[0])
             true_error_avg += true_error
             empirical_avg += result[1] / m
@@ -211,7 +211,6 @@ def get_true_error(intervals):
             not_overlapping += interval[1] - interval[0]
 
     error = 0.2 * overlapping + 0.8 * (0.5 - overlapping) + 0.9 * not_overlapping + 0.1 * (0.5 - not_overlapping)
-    print(error)
     return error
 
 
@@ -226,10 +225,12 @@ def plot_empirical_and_true(empirical, true, y_points, x_label):
         filename='c.png'
 
     plt.savefig(filename)
+    plt.clf()
 
-# a()
-# xs, ys = get_points(100)
-# result = find_best_interval(xs, ys, 2)
-# c(result)
+
+a()
+xs, ys = get_points(100)
+result = find_best_interval(xs, ys, 2)
+c(result)
 best_hypothesis = d()
 e(best_hypothesis)
